@@ -1,0 +1,4 @@
+#gauge {
+    max-height: calc(200px + 20px) !important;
+    overflow:hidden;
+}
