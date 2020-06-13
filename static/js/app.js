@@ -1,10 +1,13 @@
-d3.json("samples.json").then(function(data) {
-    function init() {
-       
+
+
+
+
+function gaugeinit() {
+    d3.json("samples.json").then(function(data) { 
         /////////////////////// GAUGUE CHART //////////////////////
         
         // Enter a speed between 0 and 180
-        var level = data.metada[0].wfreq * 20;
+        var level = data.metadata[0].wfreq * 20;
 
         // Trig to calc meter point
         var degrees = 180 - level,
@@ -61,8 +64,13 @@ d3.json("samples.json").then(function(data) {
 
         Plotly.newPlot('gauge', data, layout);
 
+    });
+
+};
 
 
+function barinit() {
+    d3.json("samples.json").then(function(data) { 
         //////////// BAR CHART //////////
 
         
@@ -81,6 +89,15 @@ d3.json("samples.json").then(function(data) {
         };
 
         Plotly.newPlot("bar", bardefaulttrace, barlayout)
+
+    });
+
+};
+
+
+
+function bubbleinit() {
+    d3.json("samples.json").then(function(data) { 
 
         //////////// BUBBLE CHART //////////
 
@@ -109,34 +126,59 @@ d3.json("samples.json").then(function(data) {
         };
 
         Plotly.newPlot("bubble", bubbledefaultrace, bubblelayout)
+    });
+
+};
 
 
+function metadatainit() {
+    d3.json("samples.json").then(function(data) { 
         /////////// METADATA ////////////
-          
-          //get the entries from the object and print them in html
-       var defaultmetadata = Object
+            
+            //get the entries from the object and print them in html
+        var defaultmetadata = Object
                 .entries(data.metadata[0])
                 .forEach( (x) => 
                 d3.select("#sample-metadata").append("p").text( `${x[0]} :  ${x[1]}`));
 
-    };
+        
+    });
 
-   ///// ID SELECTOR /////
-   // Here I create a drop down to all the possible datasets so we can use it to update charts
-    var IDselector = d3.select("#selDataset").selectAll("option")
-    .data(data.names)
-    .enter()
-    .append("option")
-    .attr("value", (d) => d)
-    .text((d) => d);
+};
 
 
-    ////////// EVENT ////////////
 
-    d3.select("body").on("change", updatecharts);
+function selectorinit() {
+    d3.json("samples.json").then(function(data) { 
+///// ID SELECTOR /////
+        // Here I create a drop down to all the possible datasets so we can use it to update charts
+        var IDselector = d3.select("#selDataset").selectAll("option")
+        .data(data.names)
+        .enter()
+        .append("option")
+        .attr("value", (d) => d)
+        .text((d) => d);
 
-    // UPDATE CHART HANDLER
-    function updatecharts() {
+    });
+
+};
+
+barinit();
+bubbleinit();
+gaugeinit();
+metadatainit();
+selectorinit();
+
+
+
+
+////////// EVENT ////////////
+
+
+
+// UPDATE CHART HANDLER
+function updatecharts() {
+    d3.json("samples.json").then(function(data) { 
 
         var datasetID = d3.select("#selDataset").node().value;
         var dataindex = data.names.indexOf(datasetID);
@@ -173,10 +215,9 @@ d3.json("samples.json").then(function(data) {
                     .entries(data.metadata[dataindex])
                     .forEach( (x) => 
                     d3.select("#sample-metadata").append("p").text( `${x[0]} :  ${x[1]}`));
+    });
 
-    
-    };
+};
 
-    init();
+d3.select("body").on("change", updatecharts);
 
-});
